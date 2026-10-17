@@ -1,0 +1,46 @@
+[
+  {
+    "expectedRevision": 0,
+    "command": {
+      "type": "register-individual",
+      "person": {
+        "firstName": "Robin",
+        "lastName": "Sample",
+        "email": "robin@example.test"
+      }
+    }
+  },
+  {
+    "expectedRevision": 1,
+    "command": { "type": "verify-individual", "code": "424242" }
+  },
+  {
+    "expectedRevision": 2,
+    "command": {
+      "type": "attach-document",
+      "kind": "individual",
+      "document": "identity"
+    }
+  },
+  {
+    "expectedRevision": 3,
+    "command": {
+      "type": "attach-document",
+      "kind": "individual",
+      "document": "address"
+    }
+  },
+  {
+    "expectedRevision": 4,
+    "command": { "type": "submit", "kind": "individual" }
+  },
+  {
+    "expectedRevision": 5,
+    "command": {
+      "type": "review",
+      "kind": "individual",
+      "decision": "approve",
+      "note": "Synthetic checklist is complete."
+    }
+  }
+]
