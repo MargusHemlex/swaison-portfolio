@@ -311,6 +311,8 @@ onMounted(load);
                   <h3>Addresses</h3>
                   <AddressFields
                     v-if="editable"
+                    :saved-registration="workspace.company!.registration"
+                    :saved-operating="workspace.company!.operating"
                     :disabled="busy"
                     @save="
                       (registration, operating) =>

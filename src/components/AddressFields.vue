@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import type { Address } from "../../shared/contracts";
-defineProps<{ disabled: boolean }>();
+const props = defineProps<{
+  disabled: boolean;
+  savedRegistration: Address | null;
+  savedOperating: Address | null;
+}>();
 const emit = defineEmits<{
   save: [registration: Address, operating: Address];
 }>();
 const registration = reactive<Address>({
-  street: "12 Example Street",
-  city: "Tallinn",
-  country: "EE",
+  ...(props.savedRegistration ?? {
+    street: "12 Example Street",
+    city: "Tallinn",
+    country: "EE",
+  }),
 });
 const operating = reactive<Address>({
-  street: "24 Sample Avenue",
-  city: "Tartu",
-  country: "EE",
+  ...(props.savedOperating ?? {
+    street: "24 Sample Avenue",
+    city: "Tartu",
+    country: "EE",
+  }),
 });
 </script>
 <template>

@@ -43,6 +43,13 @@ const note = ref(
         </button>
       </div>
     </form>
+    <p v-else-if="status === 'approved'">
+      This example is approved. Its review is complete.
+    </p>
+    <p v-else-if="status === 'changes-requested'">
+      Changes have been requested. The applicant can update and resubmit this
+      example.
+    </p>
     <p v-else>Submit this application as the applicant before reviewing it.</p>
     <blockquote v-if="reviewNote">{{ reviewNote }}</blockquote>
   </section>

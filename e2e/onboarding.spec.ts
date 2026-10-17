@@ -57,6 +57,9 @@ test("individual happy path, invalid code, changes requested and final approval"
   await page.getByLabel("Example role").selectOption("reviewer");
   await page.getByRole("button", { name: "Approve example" }).click();
   await expect(page.getByText("Approved", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("This example is approved. Its review is complete."),
+  ).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -69,16 +72,46 @@ test("business addresses, signatory, checklist, review and browser isolation", a
   await page
     .getByRole("button", { name: "Create company application" })
     .click();
+  const registrationStreet = () =>
+    page
+      .getByRole("group", { name: "Registration address" })
+      .getByLabel("Street");
+  const operatingStreet = () =>
+    page.getByRole("group", { name: "Operating address" }).getByLabel("Street");
+  await registrationStreet().fill("88 Synthetic Way");
+  await operatingStreet().fill("99 Example Lane");
   await page.getByRole("button", { name: "Save addresses" }).click();
   await expect(page.getByRole("status")).toContainText("addresses saved");
+  await page.getByLabel("Example role").selectOption("reviewer");
+  await page.getByLabel("Example role").selectOption("applicant");
+  await expect(registrationStreet()).toHaveValue("88 Synthetic Way");
+  await expect(operatingStreet()).toHaveValue("99 Example Lane");
   await page.getByRole("button", { name: "Add example signatory" }).click();
   await expect(page.getByRole("status")).toContainText("signatory added");
   await attach(page, "Incorporation document");
   await attach(page, "Proof of address");
   await page.getByRole("button", { name: "Submit for review" }).click();
   await page.getByLabel("Example role").selectOption("reviewer");
+  await page
+    .getByLabel("Review note")
+    .fill("Please recheck the synthetic operating address.");
+  await page.getByRole("button", { name: "Request changes" }).click();
+  await page.getByLabel("Example role").selectOption("applicant");
+  await expect(registrationStreet()).toHaveValue("88 Synthetic Way");
+  await expect(operatingStreet()).toHaveValue("99 Example Lane");
+  await operatingStreet().fill("101 Revised Example Lane");
+  await page.getByRole("button", { name: "Save addresses" }).click();
+  await expect(page.getByRole("status")).toContainText("addresses saved");
+  await page.getByRole("button", { name: "Submit for review" }).click();
+  await page.getByLabel("Example role").selectOption("reviewer");
+  await expect(
+    page.getByText("Operating: 101 Revised Example Lane", { exact: false }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Approve example" }).click();
   await expect(page.getByText("Approved", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("This example is approved. Its review is complete."),
+  ).toBeVisible();
   const isolated = await browser.newContext();
   const other = await isolated.newPage();
   await other.goto("http://127.0.0.1:3108");
