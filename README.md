@@ -33,7 +33,7 @@ atomic rejected commands, optimistic revision checks and reproducible examples.
 
 ## Run locally
 
-Requires Node.js **22.12 or newer** and npm.
+Requires Node.js **22.13+ (22.x), or 24+** and npm.
 
 ```sh
 git clone https://github.com/MargusHemlex/swaison-portfolio.git

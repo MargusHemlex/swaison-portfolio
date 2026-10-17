@@ -1,6 +1,6 @@
 # Contributing
 
-Use Node.js 22.12+ and `npm ci`. Keep source comments and documentation in English.
+Use Node.js 22.13+ (22.x), or 24+ and `npm ci`. Keep source comments and documentation in English.
 Run `npm run check` and `npm run test:e2e` before proposing changes. Format with
 `npm run format` and verify formatting with `npm run format:check`.
 
