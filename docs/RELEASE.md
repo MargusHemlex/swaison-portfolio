@@ -1,11 +1,12 @@
-# Publication checklist
+# Publication record and maintenance checklist
 
 The owner approved publication on **2026-10-18**, after the final review of
 `eecf72457efad1f9d9c8a549a69692c2cab38cf7`. The portfolio edition is public;
 the separate production repository remains private.
 No deployment is connected to the private production application.
 
-Before publication:
+The initial public release is complete. For future releases or changes to the
+public/private boundary, repeat the applicable checks below:
 
 - Confirm the intended code scope, independent implementation and authorship description.
 - Confirm that source, paths, dependency metadata, generated output and assets contain

@@ -1,5 +1,13 @@
 # Swaison Onboarding Portal
 
+An applicant and reviewer need a shared onboarding process: incomplete applications
+must not be submitted, requested changes must reopen the right editing steps, and
+an outdated browser must not overwrite newer work.
+
+This standalone portfolio implements that workflow for fictional individuals and
+companies. It makes prerequisites, role-based commands and revision conflicts
+visible and testable.
+
 A standalone portfolio edition of an individual and corporate onboarding workflow.
 Built with **Vue 3, TypeScript, Vite, Express and Zod**, using synthetic data and an
 independent local API. No keys, private packages, database or external services are
@@ -57,6 +65,28 @@ npm start
 `127.0.0.1`. No environment file or service account is needed. Installations and
 browser downloads require network; the running application uses only its local server.
 
+## Five-minute review
+
+After installation and server startup, use the prefilled Individual example:
+
+| Step | Action                                                                 | Expected result                                                                                                   |
+| ---- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1    | Create the individual application; try code `000000`, then `424242`    | Wrong code is rejected without advancing state; the valid synthetic code moves `awaiting-verification` to `draft` |
+| 2    | Attach Identity document and Proof of address, then submit             | The checklist prerequisites are satisfied; status becomes `submitted` and editing is locked                       |
+| 3    | Select Reviewer, enter an example note and request changes             | Status becomes `changes-requested`; Applicant can edit again                                                      |
+| 4    | Select Applicant, remove and reattach Identity document, then resubmit | The checklist is corrected; status returns to `submitted`                                                         |
+| 5    | Select Reviewer and approve the example                                | Status becomes `approved`; editing stays locked and the activity trail records the accepted actions               |
+
+The reviewer selector is an explicit simulation, not a login. No email is sent and
+no file is uploaded. See [the individual and business journeys](examples/README.md)
+for the complete steps, [architecture](docs/ARCHITECTURE.md) for state boundaries,
+and [verification](docs/VERIFICATION.md) for the corresponding tests.
+
+At the API boundary, a command with an outdated `expectedRevision` receives HTTP
+409 and leaves state unchanged. The browser refreshes after a failed mutation
+before allowing the next command; a client timeout does not prove the command
+was undone.
+
 ## Verify
 
 ```sh
@@ -70,6 +100,26 @@ limited publication check. Playwright runs against the built client and real loc
 API. CI executes these checks plus a dependency audit. To update the README image:
 `UPDATE_SCREENSHOT=1 npm run test:e2e` after building.
 
+## Author contribution
+
+MargusHemlex defined the portfolio's workflow scope and technical boundaries, with
+AI-assisted implementation and review. The engineering decisions demonstrated here
+are:
+
+- An explicit application state model and a command reducer that applies changes
+  to a clone, so rejected commands leave the existing state unchanged.
+- Shared TypeScript/Zod contracts and strict validation at the HTTP boundary,
+  including synthetic input constraints and bounded request sizes.
+- Optimistic revision checks and client refresh after failed mutations to handle
+  stale views and ambiguous timeout outcomes.
+- Per-browser in-memory workspace isolation, bounded state lifetime and a sequenced
+  activity trail, with domain, HTTP and browser tests for the selected workflows.
+
+This is an independently authored portfolio implementation of selected historical
+concepts. Its selectable roles and in-memory event trail do not establish identity,
+regulatory compliance or a durable audit system. Production integrations and the
+original application's source remain separate and private.
+
 ## Engineering guide
 
 | Topic                                         | Guide                                |
@@ -79,7 +129,7 @@ API. CI executes these checks plus a dependency audit. To update the README imag
 | Reproducible individual and business journeys | [Examples](examples/README.md)       |
 | Private/public separation and data handling   | [Privacy and scope](docs/PRIVACY.md) |
 | Verification evidence and limits              | [Verification](docs/VERIFICATION.md) |
-| Remaining publication gate                    | [Release checklist](docs/RELEASE.md) |
+| Publication record and future checks          | [Release checklist](docs/RELEASE.md) |
 | Changes and contributions                     | [Contributing](CONTRIBUTING.md)      |
 
 ## Limits
