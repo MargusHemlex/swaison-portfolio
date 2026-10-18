@@ -1,6 +1,8 @@
 # Publication checklist
 
-Repository visibility must remain **private** until the owner approves publication.
+The owner approved publication on **2026-10-18**, after the final review of
+`eecf72457efad1f9d9c8a549a69692c2cab38cf7`. The portfolio edition is public;
+the separate production repository remains private.
 No deployment is connected to the private production application.
 
 Before publication:

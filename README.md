@@ -92,7 +92,7 @@ not tamper-proof evidence. No real files exist behind the synthetic PDF filename
 
 This is a local portfolio application. Public hosting needs separate authentication,
 access, persistence, abuse and deployment decisions; this repo is not connected to
-the production deployment. It remains private pending the owner's final review.
+the production deployment. Publication was approved by the owner after the final review on 2026-10-18.
 
 ## License
 
